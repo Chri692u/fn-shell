@@ -27,7 +27,5 @@ library
 
 executable fn-Shell
   main-is:             Main.hs
-  other-modules:       Shell, ShellTypes, ShellUtility, ShellCommands,
-                       FileSystem
   build-depends:       base, fn-Shell
   default-language:    Haskell2010
