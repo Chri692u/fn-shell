@@ -10,7 +10,7 @@ initMsg = do
     putStrLn "Ctrl + D will quit the shell"
 
 allCmds :: [String]
-allCmds = [":help", ":quit", ":load", ":pwd", ":ls"]
+allCmds = [":help", ":quit", ":load", ":pwd", ":ls", ":cd"]
 
 checkFiles fs = do
     checks <- mapM doesFileExist fs
