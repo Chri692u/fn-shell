@@ -20,8 +20,8 @@ initState = do
     cursor <- initCursor fs
     return $ IState fs cursor
 
-initCursor :: FileSystemTree -> IO Directory
-initCursor (Dir d) = return d
+initCursor :: FileSystemTree -> IO [Directory]
+initCursor (Dir d) = return [d]
             
 -- Start the REPL
 start :: Repl ()
