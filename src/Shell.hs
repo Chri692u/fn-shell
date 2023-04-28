@@ -17,11 +17,13 @@ initState :: IO IState
 initState = do
     root <- getCurrentDirectory
     fs <- initFs root
-    return $ IState fs
-    
+    cursor <- initCursor fs
+    return $ IState fs cursor
 
+initCursor :: FileSystemTree -> IO Directory
+initCursor (Dir d) = return d
+            
 -- Start the REPL
-
 start :: Repl ()
 start = do
   liftIO initMsg
