@@ -1,7 +1,7 @@
 module Commands(settings) where
 
 import Control.Monad.Trans
-import Control.Monad.State hiding (when)
+import Control.Monad.State hiding (when, unless)
 import Control.Conditional
 import System.Process (callCommand)
 import System.Exit (exitSuccess)
@@ -13,6 +13,8 @@ import ShellTypes
 import FileSystem
 import ShellUtility (allCmds, checkFiles)
 import System.Directory (getCurrentDirectory)
+import Data.Foldable (find)
+import Data.Maybe
 -- Options --
 settings :: [(String, String -> Repl ())]
 settings = [
@@ -26,17 +28,15 @@ settings = [
 
 -- Commands -- 
 help :: String -> Repl ()
-help _ = void $ liftIO (showHelp allCmds)
-    where
-        showHelp [] = return ()
-        showHelp (x:xs) = case x of
-            ":help" -> putStrLn (":help -- " ++ "List all commands") >> showHelp xs
-            ":quit" -> putStrLn (":quit -- " ++ "Leaves the shell") >> showHelp xs
-            ":cat" -> putStrLn (":cat F(s) -- " ++ "Print file(s)") >> showHelp xs
-            ":pwd" -> putStrLn (":pwd -- " ++ "Print working directory") >> showHelp xs
-            ":ls" -> putStrLn (":ls ?D -- " ++ "List files in directory") >> showHelp xs
-            ":cd" -> putStrLn (":cd D/.. -- " ++ "Change directory to D or to ../pwd") >> end
-                where end = putStrLn "  where ?: optional argument, F: file in directory"
+help _ = void $ liftIO $ mapM_ putStrLn 
+            [":help -- List all commands"
+            ,":quit -- Leaves the shell"
+            ,":cat F(s) -- Print file(s)"
+            ,":pwd -- Print working directory"
+            ,":ls ?D -- List files in directory"
+            ,":cd D/.. -- Change directory to D or to ../pwd\n  where ?: optional argument, F: file in directory"]
+
+
 
 -- Quit the shell
 quit :: a -> Repl ()
@@ -48,10 +48,9 @@ cat args = do
     let c = head $ cursor st
     bools <- liftIO $ mapM (exists c) args
     liftIO $ print bools
-    if and bools then do
-        contents <- liftIO $ mapM L.readFile args
-        liftIO $ mapM_ (putStrLn . L.unpack) contents
-    else notFound
+    unless (and bools) notFound
+    contents <- liftIO $ mapM L.readFile args
+    liftIO $ mapM_ (putStrLn . L.unpack) contents
         where notFound = liftIO $ putStrLn "Error: File(s) do not exist."
 
 -- Print current directory
@@ -73,35 +72,29 @@ ls :: String -> Repl ()
 ls path = do
     st <- get
     let c = head $ cursor st
-    exist <- liftIO $ exists c path
-    if exist then do
-        forM_ (dirTree c) $ \t -> do
-            when (nameFs t == path) $ do
-                liftIO $ mapM_ (putStrLn . content) (dirTree $ fsDir t)
-    else
-        if path == "" then do
-            lsCurrent st
-        else notFound
-            where notFound = liftIO $ putStrLn "Error: Directory does not exist"
+    let found = find (\t -> nameFs t == path) (dirTree c)
+    when (isJust found) $ do
+        let dir = fsDir $ fromJust found
+        liftIO $ mapM_ (putStrLn . content) $ dirTree dir
+    when (path == "") $ lsCurrent st
+    unless (isJust found || path == "") notFound
+        where notFound = liftIO $ putStrLn "Error: Directory does not exist"
 
 -- Change directory
 cd :: String -> Repl ()
 cd path = do
     st <- get
     let c = head $ cursor st
-    exist <- liftIO $ exists c path
-    if exist then do
-        forM_ (dirTree c) $ \t -> do
-            when (nameFs t == path) $ do
-                let c' = fsDir t : cursor st
-                put (IState (fs st) c')
-    else
-        if path == ".." then do
-            if null (tail $ cursor st) then topOfFs else 
-                do put (IState (fs st) (tail $ cursor st))
-        else notFound
-            where notFound = liftIO $ putStrLn "Error: Directory does not exist"
-                  topOfFs  = liftIO $ putStrLn "Error: Top of filestructure already"
+    let found = find (\t -> nameFs t == path) (dirTree c)
+    when (isJust found) $ do
+        let c' = fsDir $ fromJust found
+        put (IState (fs st) (c':cursor st))
+    when (path == "..") $
+            if null (tail $ cursor st) then topOfFs
+            else void $ put (IState (fs st) (tail $ cursor st))
+    unless (isJust found || path == "..") notFound
+        where notFound = liftIO $ putStrLn "Error: Directory does not exist"
+              topOfFs  = liftIO $ putStrLn "Error: Top of filestructure already"
 
 -- mock execute function
 exec = putStrLn
