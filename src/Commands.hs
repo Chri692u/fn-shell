@@ -1,4 +1,4 @@
-module Commands(exec, load, settings) where
+module Commands(settings) where
 
 import Control.Monad.Trans
 import Control.Monad.State hiding (when)
@@ -13,14 +13,12 @@ import ShellTypes
 import FileSystem
 import ShellUtility (allCmds, checkFiles)
 import System.Directory (getCurrentDirectory)
-import System.FilePath
-
 -- Options --
 settings :: [(String, String -> Repl ())]
 settings = [
       ("help", help) -- :help
     , ("quit", quit) -- :quit
-    , ("load", load . words) -- :load
+    , ("cat", cat . words) -- :cat
     , ("pwd", pwd) -- :pwd
     , ("ls" , ls) -- :ls
     , ("cd" , cd) -- :cd
@@ -34,21 +32,27 @@ help _ = void $ liftIO (showHelp allCmds)
         showHelp (x:xs) = case x of
             ":help" -> putStrLn (":help -- " ++ "List all commands") >> showHelp xs
             ":quit" -> putStrLn (":quit -- " ++ "Leaves the shell") >> showHelp xs
-            ":load" -> putStrLn (":load -- " ++ "Load file(s)") >> showHelp xs
+            ":cat" -> putStrLn (":cat F(s) -- " ++ "Print file(s)") >> showHelp xs
             ":pwd" -> putStrLn (":pwd -- " ++ "Print working directory") >> showHelp xs
-            ":ls" -> putStrLn (":ls ?D-- " ++ "List files in directory") >> showHelp xs
-            ":cd" -> putStrLn (":cd D/..-- " ++ "Change directory to D or to ../pwd")
+            ":ls" -> putStrLn (":ls ?D -- " ++ "List files in directory") >> showHelp xs
+            ":cd" -> putStrLn (":cd D/.. -- " ++ "Change directory to D or to ../pwd") >> end
+                where end = putStrLn "  where ?: optional argument, F: file in directory"
 
 -- Quit the shell
 quit :: a -> Repl ()
 quit _ = liftIO (putStrLn "Leaving (fn shell).") >> abort
 
--- Load a file and run it
-load :: [String] -> Repl ()
-load args = liftIO $ ifM (checkFiles args) exist (void $ putStrLn "File(s) do not exist")
-    where exist = do
-            contents <- liftIO $ mapM L.readFile args
-            liftIO $ mapM_ (exec . L.unpack) contents
+cat :: [String] -> Repl ()
+cat args = do
+    st <- get
+    let c = head $ cursor st
+    bools <- liftIO $ mapM (exists c) args
+    liftIO $ print bools
+    if and bools then do
+        contents <- liftIO $ mapM L.readFile args
+        liftIO $ mapM_ (putStrLn . L.unpack) contents
+    else notFound
+        where notFound = liftIO $ putStrLn "Error: File(s) do not exist."
 
 -- Print current directory
 pwd :: String -> Repl ()
@@ -78,7 +82,7 @@ ls path = do
         if path == "" then do
             lsCurrent st
         else notFound
-            where notFound = liftIO $ putStrLn "Directory does not exist"
+            where notFound = liftIO $ putStrLn "Error: Directory does not exist"
 
 -- Change directory
 cd :: String -> Repl ()

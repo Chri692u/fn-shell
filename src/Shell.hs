@@ -3,11 +3,8 @@ module Shell(shell) where
 import Data.List (isPrefixOf)
 import Control.Monad.Trans
 import Control.Monad.State
-import Control.Monad.IO.Class
 import System.Console.Repline
 import System.Directory
-import System.Environment
-
 import FileSystem
 import Commands
 import ShellTypes

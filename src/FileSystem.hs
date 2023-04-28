@@ -2,8 +2,6 @@ module FileSystem(initFs, nameFs, content, exists) where
     
 import System.Directory
 import System.FilePath
-import Control.Monad
-
 import ShellTypes
 
 -- Pretty print an element in the file system
@@ -24,7 +22,7 @@ exists (DirNode n tree) path = case takeFileName n == path of
         return $ elem path names
             where
                 name (FileNode n) = do
-                    return n
+                    return $ takeFileName n
                 name (Dir d) = do
                     return (takeFileName $ dirName d)
     True -> do
