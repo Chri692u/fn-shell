@@ -93,9 +93,11 @@ cd path = do
                 put (IState (fs st) c')
     else
         if path == ".." then do
-            put (IState (fs st) (tail $ cursor st))
+            if null (tail $ cursor st) then topOfFs else 
+                do put (IState (fs st) (tail $ cursor st))
         else notFound
-            where notFound = liftIO $ putStrLn "Directory does not exist"
+            where notFound = liftIO $ putStrLn "Error: Directory does not exist"
+                  topOfFs  = liftIO $ putStrLn "Error: Top of filestructure already"
 
 -- mock execute function
 exec = putStrLn
