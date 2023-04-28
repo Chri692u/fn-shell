@@ -29,7 +29,7 @@ settings = [
 
 -- Commands -- 
 help :: String -> Repl ()
-help _ = void $ liftIO $ mapM_ putStrLn 
+help _ = void $ liftIO $ mapM_ putStrLn
             [":help -- List all commands"
             ,":quit -- Leaves the shell"
             ,":cat F(s) -- Print file(s)"
@@ -57,8 +57,8 @@ cat args = do
 pwd :: String -> Repl ()
 pwd _ = do
     st <- get
-    let c = cursor st
-    void $ liftIO $ putStrLn $ "[" ++ dirName c ++ "]"
+    let names = concatMap (\x ->  "/" ++ dirName x) $ reverse (fs st)
+    liftIO $ putStrLn names
 
 -- List directory
 lsCurrent :: IState -> Repl ()
