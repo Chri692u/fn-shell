@@ -11,7 +11,3 @@ initMsg = do
 
 allCmds :: [String]
 allCmds = [":help", ":quit", ":cat", ":pwd", ":ls", ":cd"]
-
-checkFiles fs = do
-    checks <- mapM doesFileExist fs
-    return $ foldr (&&) True checks

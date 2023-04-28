@@ -11,7 +11,7 @@ import qualified Data.Text.Lazy.IO as L
 
 import ShellTypes
 import FileSystem
-import ShellUtility (allCmds, checkFiles)
+import ShellUtility
 import System.Directory (getCurrentDirectory)
 import Data.Foldable (find)
 import Data.Maybe
