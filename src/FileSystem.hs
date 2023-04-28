@@ -1,4 +1,4 @@
-module FileSystem(initFs, nameFs, dirTree, dirName, content, search) where
+module FileSystem(initFs, nameFs, content, exists) where
     
 import System.Directory
 import System.FilePath
@@ -6,26 +6,19 @@ import Control.Monad
 
 import ShellTypes
 
-indent :: Int -> String
-indent 0 = ""
-indent n = " " ++ indent (pred n) 
-
-dirName :: Directory -> FilePath
-dirName (DirNode name _) = name
-
-dirTree :: Directory -> [FileSystemTree]
-dirTree (DirNode _ fs) = fs  
-
+-- Pretty print an element in the file system
 content :: FileSystemTree -> String
 content (FileNode path) =  "(" ++ takeFileName path ++ ")" ++ " "
 content (Dir d) = "[" ++ takeFileName  (dirName d) ++ "]" ++ " "
 
+--- Get the base name of a directory
 nameFs :: FileSystemTree ->  String
 nameFs (Dir d) = takeFileName $ dirName d
-nameFs (FileNode n) = n
+nameFs (FileNode n) = takeFileName n
 
-search :: Directory -> FilePath -> IO Bool
-search (DirNode n tree) path = case takeFileName n == path of
+-- Check if a path exists in a directory
+exists :: Directory -> FilePath -> IO Bool
+exists (DirNode n tree) path = case takeFileName n == path of
     False -> do
         names <- mapM name tree
         return $ elem path names
@@ -37,7 +30,7 @@ search (DirNode n tree) path = case takeFileName n == path of
     True -> do
         return True
 
-
+-- Initialize the file system
 initFs :: FilePath -> IO FileSystemTree
 initFs path = do
     isDir <- doesDirectoryExist path
