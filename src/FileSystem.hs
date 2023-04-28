@@ -1,41 +1,21 @@
-module FileSystem(initFs, nameFs, content, exists) where
+module FileSystem(createDir, exists) where
     
 import System.Directory ( doesDirectoryExist, listDirectory )
 import System.FilePath
 import ShellTypes
 
--- Pretty print an element in the file system
-content :: FileSystemTree -> String
-content (FileNode path) =  "(" ++ takeFileName path ++ ")" ++ " "
-content (Dir d) = "[" ++ takeFileName  (dirName d) ++ "]" ++ " "
-
---- Get the base name of a directory
-nameFs :: FileSystemTree ->  String
-nameFs (Dir d) = takeFileName $ dirName d
-nameFs (FileNode n) = takeFileName n
-
 -- Check if a path exists in a directory
 exists :: Directory -> FilePath -> IO Bool
-exists (DirNode n tree) path = case takeFileName n == path of
-    False -> do
-        names <- mapM name tree
-        return $ elem path names
-            where
-                name (FileNode n) = do
-                    return $ takeFileName n
-                name (Dir d) = do
-                    return (takeFileName $ dirName d)
-    True -> do
-        return True
+exists dir@(Dir n f d) path = return $ takeFileName n `elem` allContent dir
 
 -- Initialize the file system
-initFs :: FilePath -> IO FileSystemTree
-initFs path = do
+createDir :: FilePath -> IO Directory
+createDir path = do
     isDir <- doesDirectoryExist path
-    if isDir then 
-        do
-            children <- listDirectory path
-            childTrees <- mapM (initFs . (path </>)) children
-            return $ Dir $ DirNode path childTrees
-        else
-            return $ FileNode path
+    if isDir then do
+        list <- listDirectory path
+        let files = filter (elem '.') list
+        let dirs = filter (notElem '.') list
+        return $ Dir path dirs files
+    else
+        return $ Dir path [] []

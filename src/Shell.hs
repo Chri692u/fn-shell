@@ -13,12 +13,8 @@ import ShellUtility
 initState :: IO IState
 initState = do
     root <- getCurrentDirectory
-    fs <- initFs root
-    cursor <- initCursor fs
-    return $ IState fs cursor
-
-initCursor :: FileSystemTree -> IO [Directory]
-initCursor (Dir d) = return [d]
+    fs <- createDir root
+    return $ IState [fs] fs
             
 -- Start the REPL
 start :: Repl ()

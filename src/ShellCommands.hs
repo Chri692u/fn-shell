@@ -1,4 +1,4 @@
-module ShellCommands(settings) where
+module ShellCommands(settings, exec) where
 
 import Control.Monad.Trans
 import Control.Monad.State hiding (when, unless)
@@ -15,6 +15,7 @@ import ShellUtility
 import System.Directory (getCurrentDirectory)
 import Data.Foldable (find)
 import Data.Maybe
+import System.FilePath (takeFileName)
 -- Options --
 settings :: [(String, String -> Repl ())]
 settings = [
@@ -45,9 +46,8 @@ quit _ = liftIO (putStrLn "Leaving (fn shell).") >> abort
 cat :: [String] -> Repl ()
 cat args = do
     st <- get
-    let c = head $ cursor st
+    let c = cursor st
     bools <- liftIO $ mapM (exists c) args
-    liftIO $ print bools
     unless (and bools) notFound
     contents <- liftIO $ mapM L.readFile args
     liftIO $ mapM_ (putStrLn . L.unpack) contents
@@ -57,25 +57,24 @@ cat args = do
 pwd :: String -> Repl ()
 pwd _ = do
     st <- get
-    let c = head $ cursor st
+    let c = cursor st
     void $ liftIO $ putStrLn $ "[" ++ dirName c ++ "]"
 
 -- List directory
 lsCurrent :: IState -> Repl ()
 lsCurrent st = do
-    let c = head $ cursor st
-    liftIO $ putStrLn $ dirName c
-    forM_ (dirTree c) $ \t ->
-        do liftIO $ putStrLn $ content t
+    let c = cursor st
+    liftIO $ mapM_ putStrLn $ allContent c
 
 ls :: String -> Repl ()
 ls path = do
     st <- get
-    let c = head $ cursor st
-    let found = find (\t -> nameFs t == path) (dirTree c)
+    let c = cursor st
+    let found = find (\d -> takeFileName d == path) $ subDirs c
     when (isJust found) $ do
-        let dir = fsDir $ fromJust found
-        liftIO $ mapM_ (putStrLn . content) $ dirTree dir
+        let path' = fromJust found
+        dir <- liftIO $ createDir path'
+        liftIO $ mapM_ putStrLn $ allContent dir
     when (path == "") $ lsCurrent st
     unless (isJust found || path == "") notFound
         where notFound = liftIO $ putStrLn "Error: Directory does not exist"
@@ -84,14 +83,15 @@ ls path = do
 cd :: String -> Repl ()
 cd path = do
     st <- get
-    let c = head $ cursor st
-    let found = find (\t -> nameFs t == path) (dirTree c)
+    let c = cursor st
+    let found = find (\d -> takeFileName d == path) $ subDirs c
     when (isJust found) $ do
-        let c' = fsDir $ fromJust found
-        put (IState (fs st) (c':cursor st))
+        let path' = fromJust found
+        dir <- liftIO $ createDir path'
+        put (IState (dir:fs st) dir)
     when (path == "..") $
-            if null (tail $ cursor st) then topOfFs
-            else void $ put (IState (fs st) (tail $ cursor st))
+            if null (tail $ fs st) then topOfFs
+            else void $ put (IState (tail $ fs st) (head $ tail $ fs st))
     unless (isJust found || path == "..") notFound
         where notFound = liftIO $ putStrLn "Error: Directory does not exist"
               topOfFs  = liftIO $ putStrLn "Error: Top of filestructure already"

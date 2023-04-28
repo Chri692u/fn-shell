@@ -1,29 +1,29 @@
 module ShellTypes where
 
+import qualified Data.Map as M
 import System.Console.Repline
 import Control.Monad.State
+import System.FilePath
 
+type Files = [FilePath]
+type Subdirs = [FilePath]
 -- Types for the file system
-data Directory = DirNode FilePath [FileSystemTree]
-data FileSystemTree = FileNode FilePath | Dir Directory
+data Directory = Dir FilePath Subdirs Files
 
 -- Shell state
 data IState = IState { 
-        fs :: FileSystemTree ,
-        cursor :: [Directory]
+        fs :: [Directory],
+        cursor :: Directory
     }
 
 -- Shell Type
 type Repl a = HaskelineT (StateT IState IO) a
 
--- Get the directory from the file system
-fsDir :: FileSystemTree -> Directory
-fsDir (Dir dir) = dir
+allContent :: Directory -> [FilePath]
+allContent (Dir name dirs files) = dirs ++ files
 
--- Get directory name
-dirName :: Directory -> FilePath
-dirName (DirNode name _) = name
+subDirs :: Directory -> [FilePath]
+subDirs (Dir _ dirs _) = dirs
 
--- Get the list of files in a directory
-dirTree :: Directory -> [FileSystemTree]
-dirTree (DirNode _ fs) = fs  
+dirName :: Directory ->  String
+dirName (Dir n _ _) = takeFileName n
