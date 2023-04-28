@@ -1,4 +1,4 @@
-module Commands(settings) where
+module ShellCommands(settings) where
 
 import Control.Monad.Trans
 import Control.Monad.State hiding (when, unless)

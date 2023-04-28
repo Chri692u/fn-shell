@@ -6,7 +6,7 @@ import Control.Monad.State
 import System.Console.Repline
 import System.Directory
 import FileSystem
-import Commands
+import ShellCommands
 import ShellTypes
 import ShellUtility
 

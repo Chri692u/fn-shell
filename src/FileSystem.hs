@@ -1,6 +1,6 @@
 module FileSystem(initFs, nameFs, content, exists) where
     
-import System.Directory
+import System.Directory ( doesDirectoryExist, listDirectory )
 import System.FilePath
 import ShellTypes
 
