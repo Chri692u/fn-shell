@@ -2,10 +2,9 @@
 A functional shell and scripting language
 
 # Installation
-run 'cabal install' to install and build dependencies
+*temporary:* run 'cabal repl' to install dependencies, ':l main' to load the function and run 'main' in GHCi.
 ## Dependencies
 1. The Glasgow Haskell Compiler (GHC)
 2. cabal
 
 # Shell Commands
-
