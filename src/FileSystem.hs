@@ -1,5 +1,9 @@
-module FileSystem(initFs, exists) where
+module FileSystem(initFs, saveFs, exists) where
 
+import qualified Data.ByteString.Lazy as BL
+import qualified Data.Binary as B
+import Data.Binary.Put (runPut)
+import Data.Binary.Get (runGetOrFail)
 
 import System.Directory ( doesDirectoryExist, listDirectory )
 import System.FilePath
@@ -31,3 +35,9 @@ initFs path' = do
             return $ Dir $ DirNode info childTrees
         else
             return $ FileNode $ parseFile path'
+
+saveFs :: FileSystemTree -> FilePath -> IO ()
+saveFs fs filePath = BL.writeFile filePath (B.encode fs)
+
+loadFs :: FilePath -> IO FileSystemTree
+loadFs = B.decodeFile

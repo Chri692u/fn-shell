@@ -12,14 +12,15 @@ import ShellUtility
 
 initState :: IO IState
 initState = do
-    root <- getHomeDirectory
+    root <- getCurrentDirectory
     fs <- initFs root
+    saveFs fs (root ++ "/tree.bin")
     cursor <- initCursor fs
     return $ IState fs cursor
 
 initCursor :: FileSystemTree -> IO [Directory]
 initCursor (Dir d) = return [d]
-            
+
 -- Start the REPL
 start :: Repl ()
 start = do
@@ -34,16 +35,11 @@ cmd :: String -> Repl ()
 cmd arg = liftIO $ print arg
 
 -- Tab completion --
-defaultMatcher :: MonadIO m => [(String, CompletionFunc m)]
-defaultMatcher = [
-    (":load" , fileCompleter)
-  ]
-
 complete :: Monad m => WordCompleter m
 complete n = return $ filter (isPrefixOf n) allCmds
 
 completer :: CompleterStyle (StateT IState IO)
-completer = Prefix (wordCompleter complete) defaultMatcher
+completer = Prefix (wordCompleter complete) []
 
 -- Top level --
 shell ::  IO ()
