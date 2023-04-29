@@ -30,12 +30,12 @@ settings = [
 -- Commands -- 
 help :: String -> Repl ()
 help _ = void $ liftIO $ mapM_ putStrLn
-            [":help -- List all commands"
-            ,":quit -- Leaves the shell"
+            [":help     -- List all commands"
+            ,":quit     -- Leaves the shell"
             ,":cat F(s) -- Print file(s)"
-            ,":pwd -- Print working directory"
-            ,":ls ?D -- List files in directory"
-            ,":cd D/.. -- Change directory to D or to ../pwd\n  where ?: optional argument, F: file in directory"]
+            ,":pwd      -- Print working directory"
+            ,":ls ?D    -- List files in directory"
+            ,":cd D/..  -- Change directory to D or to ../pwd\n  where ?: optional argument, F: file in directory, D: directory"]
 
 
 
