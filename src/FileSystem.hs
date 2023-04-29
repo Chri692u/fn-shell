@@ -1,4 +1,4 @@
-module FileSystem(initFs, saveFs, exists) where
+module FileSystem(initFs, saveFs, loadFs, exists) where
 
 import qualified Data.ByteString.Lazy as BL
 import qualified Data.Binary as B

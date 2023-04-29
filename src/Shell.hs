@@ -12,11 +12,18 @@ import ShellUtility
 
 initState :: IO IState
 initState = do
+    let tree = "/tree.bin"
     root <- getCurrentDirectory
-    fs <- initFs root
-    saveFs fs (root ++ "/tree.bin")
-    cursor <- initCursor fs
-    return $ IState fs cursor
+    exist <- doesFileExist (root ++ tree)
+    if exist then do
+        fs <- loadFs (root ++ tree)
+        cursor <- initCursor fs
+        return $ IState fs cursor
+    else do
+        fs <- initFs root
+        cursor <- initCursor fs
+        saveFs fs (root ++ tree)
+        return $ IState fs cursor
 
 initCursor :: FileSystemTree -> IO [Directory]
 initCursor (Dir d) = return [d]
