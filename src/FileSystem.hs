@@ -1,20 +1,10 @@
-module FileSystem(initFs, nameFs, content, exists) where
+module FileSystem(initFs, exists) where
 
 
 import System.Directory ( doesDirectoryExist, listDirectory )
 import System.FilePath
 import ShellTypes
 import ShellParserHelper
-
--- Pretty print an element in the file system
-content :: FileSystemTree -> String
-content (FileNode info) =  "(" ++ path info ++ ")" ++ " "
-content (Dir d) = "[" ++ takeFileName  (dirPath d) ++ "]" ++ " "
-
---- Get the base name of a directory
-nameFs :: FileSystemTree ->  String
-nameFs (Dir d) = takeFileName $ dirPath d
-nameFs (FileNode info) = takeFileName $ path info
 
 -- Check if a path exists in a directory
 exists :: Directory -> FilePath -> IO Bool

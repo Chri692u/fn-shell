@@ -15,6 +15,7 @@ import ShellUtility
 import System.Directory (getCurrentDirectory)
 import Data.Foldable (find)
 import Data.Maybe
+
 -- Options --
 settings :: [(String, String -> Repl ())]
 settings = [
@@ -57,24 +58,27 @@ pwd :: String -> Repl ()
 pwd _ = do
     st <- get
     let c = head $ cursor st
-    void $ liftIO $ putStrLn $ "[" ++ dirPath c ++ "]"
+    void $ liftIO $ putStrLn (dirPath c)
 
 -- List directory
 lsCurrent :: IState -> Repl ()
 lsCurrent st = do
     let c = head $ cursor st
-    liftIO $ putStrLn $ dirPath c
     forM_ (dirTree c) $ \t ->
-        do liftIO $ putStrLn $ content t
+        case t of
+            Dir x ->
+                unless (dirHidden x) $ liftIO $ print x
+            FileNode n ->
+                unless (hidden n) $ liftIO $ print n
 
 ls :: String -> Repl ()
 ls path = do
     st <- get
     let c = head $ cursor st
-    let found = find (\t -> nameFs t == path) (dirTree c)
+    let found = find (\t -> fsName t == path) (dirTree c)
     when (isJust found) $ do
         let dir = fsDir $ fromJust found
-        liftIO $ mapM_ (putStrLn . content) $ dirTree dir
+        liftIO $ mapM_ print $ dirTree dir
     when (path == "") $ lsCurrent st
     unless (isJust found || path == "") notFound
         where notFound = liftIO $ putStrLn "Error: Directory does not exist"
@@ -84,7 +88,7 @@ cd :: String -> Repl ()
 cd path = do
     st <- get
     let c = head $ cursor st
-    let found = find (\t -> nameFs t == path) (dirTree c)
+    let found = find (\t -> fsName t == path) (dirTree c)
     when (isJust found) $ do
         let c' = fsDir $ fromJust found
         put (IState (fs st) (c':cursor st))
