@@ -9,13 +9,13 @@ svarParser :: Parser ShellVar
 svarParser = do
     name <- many1 letter
     spaces >> char '=' >> spaces
-    externPath <- many1 $ letter <|> digit <|> char '\\' <|> char ':' <|> char '-'
+    externPath <- many1 $ letter <|> digit <|> char '/' <|> char ':' <|> char '-'
     return $ Extern name externPath
 
 envParser :: Parser ShellEnv
 envParser = do
     string "root" >> spaces >> char '=' >> spaces
-    rootPath <- many1 $ letter <|> digit <|> char '\\' <|> char ':' <|> char '-'
+    rootPath <- many1 $ letter <|> digit <|> char '/' <|> char ':' <|> char '-'
     newline
     string "vars" >> char ':'
     newline

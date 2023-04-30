@@ -24,7 +24,6 @@ initState env = do
     else do
         fs <- initFs $ root env
         cursor <- initCursor fs
-        saveFs fs (root env ++ tree)
         return $ IState fs cursor
 
 initCursor :: FileSystemTree -> IO [Directory]
