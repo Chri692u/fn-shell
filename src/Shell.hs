@@ -15,15 +15,17 @@ import ShellUtility
 
 initState :: ShellEnv -> IO IState
 initState env = do
+    shellDir <- getCurrentDirectory
     let tree = "/tree.bin"
-    exist <- doesFileExist (root env ++ tree)
+    exist <- doesFileExist (shellDir ++ tree)
     if exist then do
-        fs <- loadFs (root env </> tree)
+        fs <- loadFs (shellDir </> tree)
         cursor <- initCursor fs
         return $ IState fs cursor
     else do
         fs <- initFs $ root env
         cursor <- initCursor fs
+        saveFs fs (shellDir ++ tree)
         return $ IState fs cursor
 
 initCursor :: FileSystemTree -> IO [Directory]
