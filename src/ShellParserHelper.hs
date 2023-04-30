@@ -30,5 +30,5 @@ parseFile path = FileInfo path ext hidden
         ext = takeExtension path
         hidden = '.' == head (takeFileName path)
 
-
+parseEnv :: String -> Either ParseError ShellEnv
 parseEnv = parse envParser "<ENV PARSE ERROR>"

@@ -2,8 +2,6 @@ module FileSystem(initFs, saveFs, loadFs, exists) where
 
 import qualified Data.ByteString.Lazy as BL
 import qualified Data.Binary as B
-import Data.Binary.Put (runPut)
-import Data.Binary.Get (runGetOrFail)
 
 import System.Directory ( doesDirectoryExist, listDirectory )
 import System.FilePath

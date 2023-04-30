@@ -5,7 +5,6 @@ import System.Console.Repline
 import Control.Monad.State
 import System.FilePath
 import qualified Data.Binary as B
-import qualified Data.ByteString.Lazy as BL
 
 -- Types for the file system
 
