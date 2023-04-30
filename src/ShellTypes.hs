@@ -1,3 +1,4 @@
+{-# OPTIONS_GHC -Wno-incomplete-patterns #-}
 module ShellTypes where
 
 import System.Console.Repline
@@ -58,12 +59,19 @@ instance B.Binary FileSystemTree where
 
 -- Shell state
 data IState = IState {
-        fs :: FileSystemTree ,
-        cursor :: [Directory]
+      fs :: FileSystemTree ,
+      cursor :: [Directory]
+    }
+
+data ShellVar = Extern String FilePath
+
+data ShellEnv = ShellEnv {
+      root :: FilePath
+      , vars :: [ShellVar]
     }
 
 -- Shell Type
-type Repl a = HaskelineT (StateT IState IO) a
+type Shell a = HaskelineT (StateT IState IO) a
 
 fsDir :: FileSystemTree -> Directory
 fsDir (Dir dir) = dir

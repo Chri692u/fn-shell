@@ -13,35 +13,34 @@ import ShellCommands
 import ShellTypes
 import ShellUtility
 
-initState :: IO IState
-initState = do
+initState :: ShellEnv -> IO IState
+initState env = do
     let tree = "/tree.bin"
-    root <- getCurrentDirectory
-    exist <- doesFileExist (root ++ tree)
+    exist <- doesFileExist (root env ++ tree)
     if exist then do
-        fs <- loadFs (root </> tree)
+        fs <- loadFs (root env </> tree)
         cursor <- initCursor fs
         return $ IState fs cursor
     else do
-        fs <- initFs root
+        fs <- initFs $ root env
         cursor <- initCursor fs
-        saveFs fs (root ++ tree)
+        saveFs fs (root env ++ tree)
         return $ IState fs cursor
 
 initCursor :: FileSystemTree -> IO [Directory]
 initCursor (Dir d) = return [d]
 
 -- Start the REPL
-start :: Repl ()
+start :: Shell ()
 start = do
   liftIO initMsg
 
 -- Quit the REPL
-end :: Repl ExitDecision
+end :: Shell ExitDecision
 end = liftIO (putStrLn "Leaving (fn shell).") >> return Exit
 
 -- Handle input --
-cmd :: String -> Repl ()
+cmd :: String -> Shell ()
 cmd arg = liftIO $ print arg
 
 -- Tab completion --
@@ -52,9 +51,9 @@ completer :: CompleterStyle (StateT IState IO)
 completer = Prefix (wordCompleter complete) []
 
 -- Top level --
-shell ::  IO ()
-shell = do
-    st <- initState
+shell :: ShellEnv -> IO ()
+shell env = do
+    st <- initState env
     flip evalStateT st $ evalRepl symbol cmd settings char paste completer start end
               where
                 symbol = const . pure $ ">"

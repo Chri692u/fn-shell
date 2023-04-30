@@ -18,7 +18,7 @@ import Data.Foldable (find)
 import Data.Maybe
 
 -- Options --
-settings :: [(String, String -> Repl ())]
+settings :: [(String, String -> Shell ())]
 settings = [
       ("help", help) -- :help
     , ("quit", quit) -- :quit
@@ -29,7 +29,7 @@ settings = [
     ]
 
 -- Commands -- 
-help :: String -> Repl ()
+help :: String -> Shell ()
 help _ = void $ liftIO $ mapM_ putStrLn
             [":help     -- List all commands"
             ,":quit     -- Leaves the shell"
@@ -41,10 +41,10 @@ help _ = void $ liftIO $ mapM_ putStrLn
 
 
 -- Quit the shell
-quit :: a -> Repl ()
+quit :: a -> Shell ()
 quit _ = liftIO (putStrLn "Leaving (fn shell).") >> abort
 
-cat :: [String] -> Repl ()
+cat :: [String] -> Shell ()
 cat args = do
     st <- get
     let c = head $ cursor st
@@ -55,21 +55,21 @@ cat args = do
         where notFound = liftIO $ putStrLn "Error: File(s) do not exist."
 
 -- Print current directory
-pwd :: String -> Repl ()
+pwd :: String -> Shell ()
 pwd _ = do
     st <- get
     let c = head $ cursor st
     void $ liftIO $ putStrLn (dirPath c)
 
 -- List directory
-lsCurrent :: IState -> Repl ()
+lsCurrent :: IState -> Shell ()
 lsCurrent st = do
     let c = head $ cursor st
     forM_ (dirTree c) $ \case
         Dir x -> unless (dirHidden x) $ liftIO $ print x
         FileNode n -> unless (hidden n) $ liftIO $ print n
 
-ls :: String -> Repl ()
+ls :: String -> Shell ()
 ls path = do
     st <- get
     let c = head $ cursor st
@@ -82,7 +82,7 @@ ls path = do
         where notFound = liftIO $ putStrLn "Error: Directory does not exist"
 
 -- Change directory
-cd :: String -> Repl ()
+cd :: String -> Shell ()
 cd path = do
     st <- get
     let c = head $ cursor st
