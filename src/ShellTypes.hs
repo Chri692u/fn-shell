@@ -18,7 +18,7 @@ data FileInfo = FileInfo {
 instance Show FileInfo where
     show (FileInfo _ _ True)  = []
     show (FileInfo p e False) = fileStr
-        where fileStr = takeFileName p ++ e
+        where fileStr = takeFileName p
 
 instance B.Binary FileInfo where
   put (FileInfo p e h) = do

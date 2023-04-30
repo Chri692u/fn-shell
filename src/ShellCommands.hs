@@ -1,3 +1,4 @@
+{-# LANGUAGE LambdaCase #-}
 module ShellCommands(settings, exec) where
 
 import Control.Monad.Trans
@@ -64,12 +65,9 @@ pwd _ = do
 lsCurrent :: IState -> Repl ()
 lsCurrent st = do
     let c = head $ cursor st
-    forM_ (dirTree c) $ \t ->
-        case t of
-            Dir x ->
-                unless (dirHidden x) $ liftIO $ print x
-            FileNode n ->
-                unless (hidden n) $ liftIO $ print n
+    forM_ (dirTree c) $ \case
+        Dir x -> unless (dirHidden x) $ liftIO $ print x
+        FileNode n -> unless (hidden n) $ liftIO $ print n
 
 ls :: String -> Repl ()
 ls path = do

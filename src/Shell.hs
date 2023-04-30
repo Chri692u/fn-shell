@@ -1,3 +1,5 @@
+{-# OPTIONS_GHC -Wno-incomplete-patterns #-}
+
 module Shell(shell) where
 
 import Data.List (isPrefixOf)
@@ -5,6 +7,7 @@ import Control.Monad.Trans
 import Control.Monad.State
 import System.Console.Repline
 import System.Directory
+import System.FilePath
 import FileSystem
 import ShellCommands
 import ShellTypes
@@ -16,7 +19,7 @@ initState = do
     root <- getCurrentDirectory
     exist <- doesFileExist (root ++ tree)
     if exist then do
-        fs <- loadFs (root ++ tree)
+        fs <- loadFs (root </> tree)
         cursor <- initCursor fs
         return $ IState fs cursor
     else do
