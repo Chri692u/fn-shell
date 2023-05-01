@@ -6,7 +6,7 @@ import qualified Data.Binary as B
 import System.Directory ( doesDirectoryExist, listDirectory )
 import System.FilePath
 import ShellTypes
-import ShellParserHelper ( parseFile )
+import ShellParsers
 
 -- Check if a path exists in a directory
 exists :: Directory -> FilePath -> IO Bool

@@ -7,7 +7,7 @@ import System.Directory
 
 import Shell
 import ShellTypes
-import ShellParserHelper
+import ShellParsers
 
 -- Check if ShellEnv.ini was changed
 isUnchanged :: ShellEnv -> FilePath -> IO Bool

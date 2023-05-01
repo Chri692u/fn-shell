@@ -1,4 +1,4 @@
-module ShellParserHelper(parseFile, parseEnv) where
+module ShellParsers(parseFile, parseEnv) where
 
 import Text.ParserCombinators.Parsec
 
