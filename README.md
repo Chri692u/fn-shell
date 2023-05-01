@@ -1,5 +1,5 @@
 # (fn shell)
-A functional shell and scripting language
+A functional shell and scripting language built from first principles.
 
 ## Installation
 *temporary:* download repo and run 'cabal install' to install dependencies, then run 'cabal run' to start the shell.

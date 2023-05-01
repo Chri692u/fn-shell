@@ -102,5 +102,5 @@ cd path = do
 exec :: L.Text -> Shell ()
 exec input = do
     st <- get
-    ast <- hoistErr $ parseModule "SCRIPT PARSER ERROR: " input 
+    ast <- hoistErr $ parseModule "Error parsing script: " input 
     liftIO $ print ast
