@@ -12,6 +12,7 @@ import FileSystem
 import ShellCommands
 import ShellTypes
 import ShellUtility
+import qualified Data.Text.Lazy as L
 
 -- Initialize FST
 initState :: ShellEnv -> IO IState
@@ -46,7 +47,7 @@ end = liftIO (putStrLn "Leaving (fn shell).") >> return Exit
 
 -- Handle input --
 cmd :: String -> Shell ()
-cmd arg = liftIO $ print arg
+cmd arg = exec (L.pack arg)
 
 -- Tab completion --
 complete :: Monad m => WordCompleter m

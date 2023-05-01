@@ -16,6 +16,7 @@ import ShellUtility
 import System.Directory (getCurrentDirectory)
 import Data.Foldable (find)
 import Data.Maybe
+import ScriptParser
 
 -- Options --
 settings :: [(String, String -> Shell ())]
@@ -98,4 +99,8 @@ cd path = do
               topOfFs  = liftIO $ putStrLn "Error: Top of filestructure already"
 
 -- mock execute function
-exec = putStrLn
+exec :: L.Text -> Shell ()
+exec input = do
+    st <- get
+    ast <- hoistErr $ parseModule "SCRIPT PARSER ERROR: " input 
+    liftIO $ print ast

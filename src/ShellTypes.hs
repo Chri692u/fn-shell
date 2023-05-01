@@ -72,6 +72,12 @@ data IState = IState {
 -- Shell Type
 type Shell a = HaskelineT (StateT IState IO) a
 
+hoistErr :: Show e => Either e a -> Shell a
+hoistErr (Right val) = return val
+hoistErr (Left err) = do
+  liftIO $ print err
+  abort
+
 -- Shell Vars
 data ShellVar = Extern String FilePath
 
