@@ -36,7 +36,7 @@ main :: IO ()
 main = do
     shellDir <- getCurrentDirectory
     let binEnv = shellDir </> "ShellEnv.bin"
-        binFST = shellDir </> "tree.bin"
+        binFST = shellDir </> "FST.bin"
         ini    = "ShellEnv.ini"
 
     input <- readFile ini

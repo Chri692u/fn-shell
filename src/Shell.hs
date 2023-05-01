@@ -17,7 +17,7 @@ import ShellUtility
 initState :: ShellEnv -> IO IState
 initState env = do
     shellDir <- getCurrentDirectory
-    let tree = "tree.bin"
+    let tree = "FST.bin"
     exist <- doesFileExist (shellDir </> tree)
     if exist then do
         fs <- loadFST (shellDir </> tree)
