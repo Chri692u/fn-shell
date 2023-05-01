@@ -20,10 +20,23 @@ isUnchanged env bpath = do
     else
         return False
 
+updateAndRun :: ShellEnv -> FilePath -> FilePath -> IO ()
+updateAndRun env binEnv binFST = do
+    putStrLn "New or changed .ini file"
+    existFST <- doesFileExist binFST
+    when existFST $ do
+        putStrLn "Removing old FST"
+        removeFile binFST
+    saveSE env binEnv
+    shell env
+
 main :: IO ()
 main = do
-    let ini = "ShellEnv.ini"
     shellDir <- getCurrentDirectory
+    let binEnv = shellDir </> "ShellEnv.bin"
+        binFST = shellDir </> "tree.bin"
+        ini    = "ShellEnv.ini"
+        
     input <- readFile ini
     case parseEnv input of
         Left err -> print err
@@ -33,16 +46,7 @@ main = do
             exists <- doesDirectoryExist $ root env
             envOk <- isUnchanged env shellDir
             unless exists notFound
-            unless envOk $ do
-                putStrLn "New or changed .ini file"
-                let binEnv = shellDir </> "ShellEnv.bin"
-                    binFST = shellDir </> "tree.bin"
-                existFST <- doesFileExist binFST
-                when existFST $ do
-                    putStrLn "Removing old FST"
-                    removeFile binFST
-                saveSE env $ shellDir </> binEnv
-                shell env
+            unless envOk $ updateAndRun env binEnv binFST
             when (envOk && exists) $ shell env
             where notFound = putStrLn nfError
                   nfError = "Root directory in .ini file does not exist."
