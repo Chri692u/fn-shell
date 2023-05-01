@@ -30,6 +30,6 @@ library
 
 executable fn-Shell
   main-is:             Main.hs
-  build-depends:       base, directory, fn-Shell
+  build-depends:       base, directory, filepath, cond, fn-Shell
   hs-source-dirs:      app
   default-language:    Haskell2010

@@ -5,6 +5,7 @@ import System.Console.Repline
 import Control.Monad.State
 import System.FilePath
 import qualified Data.Binary as B
+import qualified Data.ByteString.Lazy as BL
 
 -- Types for the file system
 
@@ -62,15 +63,52 @@ data IState = IState {
       cursor :: [Directory]
     }
 
+-- Shell Type
+type Shell a = HaskelineT (StateT IState IO) a
+
+-- Shell Vars
 data ShellVar = Extern String FilePath
 
+instance Eq ShellVar where
+    (Extern name1 path1) == (Extern name2 path2) = nameOk && pathOk
+      where pathOk = path1 == path2
+            nameOk = name1 == name2
+
+instance B.Binary ShellVar where
+  put (Extern n p) = do
+    B.put n
+    B.put p
+  get = Extern <$> B.get <*> B.get
+
+-- Shell Env
 data ShellEnv = ShellEnv {
-      root :: FilePath
+      os     :: String
+      , root :: FilePath
       , vars :: [ShellVar]
     }
 
--- Shell Type
-type Shell a = HaskelineT (StateT IState IO) a
+instance Eq ShellEnv where
+    (ShellEnv os1 root1 vars1) == (ShellEnv os2 root2 vars2) = osOk && rootOk && varsOk
+      where osOk   = os1 == os2
+            rootOk = root1 == root2
+            varsOk = vars1 == vars2
+
+instance Show ShellEnv where
+  show (ShellEnv os r vs) = os ++ ": " ++ r ++ "\nwith vars: " ++ concatMap show' vs ++ "\n"
+    where show' (Extern name _) = " " ++ name
+
+instance B.Binary ShellEnv where
+  put (ShellEnv os r vs) = do
+    B.put os
+    B.put r
+    B.put vs
+  get = ShellEnv <$> B.get <*> B.get <*> B.get
+
+saveSE :: ShellEnv -> FilePath -> IO ()
+saveSE se filePath = BL.writeFile filePath (B.encode se)
+
+loadSE :: FilePath -> IO ShellEnv
+loadSE = B.decodeFile
 
 fsDir :: FileSystemTree -> Directory
 fsDir (Dir dir) = dir

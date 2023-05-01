@@ -4,24 +4,51 @@ import Text.ParserCombinators.Parsec
 
 import System.FilePath
 import ShellTypes
+import Control.Conditional (when)
 
-svarParser :: Parser ShellVar
-svarParser = do
+
+unixFullPath :: Parser FilePath
+unixFullPath = do
+    string "root" >> spaces >> char '=' >> spaces
+    char '/'
+    rel <- many1 $ letter <|> digit <|> char '/'
+    return $ "/" ++ rel
+
+winFullPath :: Parser FilePath
+winFullPath = do
+    string "root" >> spaces >> char '=' >> spaces
+    pathStart  <- many1 letter `endBy` char ':'
+    char '\\'
+    rel <- many1 $ letter <|> digit <|> char '\\'
+    newline
+    let start = concat pathStart
+    return $ start ++ ":\\" ++ rel
+
+externParser :: Char -> Parser ShellVar
+externParser ch = do
     name <- many1 letter
     spaces >> char '=' >> spaces
-    externPath <- many1 $ letter <|> digit <|> char '/' <|> char ':' <|> char '-'
-    return $ Extern name externPath
+    exPath <- many1 $ letter <|> digit <|> char ch
+    return (Extern name exPath)
 
 envParser :: Parser ShellEnv
 envParser = do
-    string "root" >> spaces >> char '=' >> spaces
-    rootPath <- many1 $ letter <|> digit <|> char '/' <|> char ':' <|> char '-'
+    string "OS" >> spaces >> char '=' >> spaces
+    os <- many1 $ letter <|> digit
     newline
-    string "vars" >> char ':'
-    newline
-    vars <- many1 svarParser
-    eof
-    return $ ShellEnv rootPath vars
+    if os == "Win64" then do
+        path <- winFullPath
+        string "vars" >> char ':'
+        newline
+        vars <- many1 $ externParser '\\'
+        return $ ShellEnv os path vars
+    else  do
+    -- Default to UNIX
+        path <- unixFullPath
+        string "vars" >> char ':'
+        newline
+        vars <- many1 $ externParser '/'
+        return $ ShellEnv os path vars
 
 -- Top level
 parseFile :: FilePath -> FileInfo
@@ -31,4 +58,4 @@ parseFile path = FileInfo path ext hidden
         hidden = '.' == head (takeFileName path)
 
 parseEnv :: String -> Either ParseError ShellEnv
-parseEnv = parse envParser "<ENV PARSE ERROR>"
+parseEnv = parse envParser "ENV PARSE ERROR: "

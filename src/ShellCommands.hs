@@ -36,7 +36,7 @@ help _ = void $ liftIO $ mapM_ putStrLn
             ,":cat F(s) -- Print file(s)"
             ,":pwd      -- Print working directory"
             ,":ls ?D    -- List files in directory"
-            ,":cd D/..  -- Change directory to D or to ../pwd\n  where ?: optional argument, F: file in directory, D: directory"]
+            ,":cd D/..  -- Change directory to D or to ../pwd\n    where ?: optional argument, F: file in directory, D: directory"]
 
 
 

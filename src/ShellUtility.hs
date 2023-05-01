@@ -5,8 +5,10 @@ import ShellTypes (IState)
 
 initMsg :: IO ()
 initMsg = do 
-    putStrLn "   (fn shell) version 0.1.0.0   "
-    putStrLn "--------------------------------"
+    putStrLn "                                  "
+    putStrLn ".--------------------------------."
+    putStrLn "|   (fn shell) version 0.1.0.0   |"
+    putStrLn ".--------------------------------."
     putStrLn ":help - a list of all features  "
     putStrLn "Ctrl + D will quit the shell    "
 

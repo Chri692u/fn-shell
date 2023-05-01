@@ -16,16 +16,18 @@ import ShellUtility
 initState :: ShellEnv -> IO IState
 initState env = do
     shellDir <- getCurrentDirectory
-    let tree = "/tree.bin"
-    exist <- doesFileExist (shellDir ++ tree)
+    let tree = "tree.bin"
+    exist <- doesFileExist (shellDir </> tree)
     if exist then do
         fs <- loadFs (shellDir </> tree)
         cursor <- initCursor fs
         return $ IState fs cursor
     else do
+        putStrLn "Could not find FST in cache."
+        putStrLn $ "Loading new FST at " ++ shellDir </> tree
         fs <- initFs $ root env
         cursor <- initCursor fs
-        saveFs fs (shellDir ++ tree)
+        saveFs fs (shellDir </> tree)
         return $ IState fs cursor
 
 initCursor :: FileSystemTree -> IO [Directory]
@@ -57,6 +59,6 @@ shell env = do
     st <- initState env
     flip evalStateT st $ evalRepl symbol cmd settings char paste completer start end
               where
-                symbol = const . pure $ ">"
+                symbol = const . pure $ "> "
                 char = Just ':'
                 paste = Just "paste"
