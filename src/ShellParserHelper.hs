@@ -7,6 +7,7 @@ import ShellTypes
 import Control.Conditional (when)
 
 
+-- File path parsing
 unixFullPath :: Parser FilePath
 unixFullPath = do
     string "root" >> spaces >> char '=' >> spaces
@@ -24,6 +25,7 @@ winFullPath = do
     let start = concat pathStart
     return $ start ++ ":\\" ++ rel
 
+-- Shell variable parsing
 externParser :: Char -> Parser ShellVar
 externParser ch = do
     name <- many1 letter
@@ -31,6 +33,7 @@ externParser ch = do
     exPath <- many1 $ letter <|> digit <|> char ch
     return (Extern name exPath)
 
+-- Parse shell environment
 envParser :: Parser ShellEnv
 envParser = do
     string "OS" >> spaces >> char '=' >> spaces

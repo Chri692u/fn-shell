@@ -38,12 +38,11 @@ help _ = void $ liftIO $ mapM_ putStrLn
             ,":ls ?D    -- List files in directory"
             ,":cd D/..  -- Change directory to D or to ../pwd\n    where ?: optional argument, F: file in directory, D: directory"]
 
-
-
 -- Quit the shell
 quit :: a -> Shell ()
 quit _ = liftIO (putStrLn "Leaving (fn shell).") >> abort
 
+-- Print content of file(s) to screen
 cat :: [String] -> Shell ()
 cat args = do
     st <- get
@@ -54,7 +53,7 @@ cat args = do
     liftIO $ mapM_ (putStrLn . L.unpack) contents
         where notFound = liftIO $ putStrLn "Error: File(s) do not exist."
 
--- Print current directory
+-- Print the current directory
 pwd :: String -> Shell ()
 pwd _ = do
     st <- get
@@ -69,6 +68,7 @@ lsCurrent st = do
         Dir x -> unless (dirHidden x) $ liftIO $ print x
         FileNode n -> unless (hidden n) $ liftIO $ print n
 
+-- Ls a directory visible to the cursor
 ls :: String -> Shell ()
 ls path = do
     st <- get

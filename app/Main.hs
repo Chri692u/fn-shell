@@ -8,8 +8,8 @@ import System.Directory
 import Shell
 import ShellTypes
 import ShellParserHelper
-import System.Directory (doesFileExist)
 
+-- Check if ShellEnv.ini was changed
 isUnchanged :: ShellEnv -> FilePath -> IO Bool
 isUnchanged env bpath = do
     let bEnv = "ShellEnv.bin"
@@ -20,6 +20,7 @@ isUnchanged env bpath = do
     else
         return False
 
+-- Update .ini binary and remove old FST binary
 updateAndRun :: ShellEnv -> FilePath -> FilePath -> IO ()
 updateAndRun env binEnv binFST = do
     putStrLn "New or changed .ini file"
@@ -30,13 +31,14 @@ updateAndRun env binEnv binFST = do
     saveSE env binEnv
     shell env
 
+-- Top level
 main :: IO ()
 main = do
     shellDir <- getCurrentDirectory
     let binEnv = shellDir </> "ShellEnv.bin"
         binFST = shellDir </> "tree.bin"
         ini    = "ShellEnv.ini"
-        
+
     input <- readFile ini
     case parseEnv input of
         Left err -> print err

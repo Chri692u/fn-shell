@@ -13,23 +13,25 @@ import ShellCommands
 import ShellTypes
 import ShellUtility
 
+-- Initialize FST
 initState :: ShellEnv -> IO IState
 initState env = do
     shellDir <- getCurrentDirectory
     let tree = "tree.bin"
     exist <- doesFileExist (shellDir </> tree)
     if exist then do
-        fs <- loadFs (shellDir </> tree)
+        fs <- loadFST (shellDir </> tree)
         cursor <- initCursor fs
         return $ IState fs cursor
     else do
         putStrLn "Could not find FST in cache."
         putStrLn $ "Loading new FST at " ++ shellDir </> tree
-        fs <- initFs $ root env
+        fs <- initFST $ root env
         cursor <- initCursor fs
-        saveFs fs (shellDir </> tree)
+        saveFST fs (shellDir </> tree)
         return $ IState fs cursor
 
+-- Initialize cursor
 initCursor :: FileSystemTree -> IO [Directory]
 initCursor (Dir d) = return [d]
 

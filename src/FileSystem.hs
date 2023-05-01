@@ -1,4 +1,4 @@
-module FileSystem(initFs, saveFs, loadFs, exists) where
+module FileSystem(initFST, saveFST, loadFST, exists) where
 
 import qualified Data.ByteString.Lazy as BL
 import qualified Data.Binary as B
@@ -22,20 +22,20 @@ exists (DirNode info tree) path' = case takeFileName (path info) == path' of
     True -> do
         return True
 
-initFs :: FilePath -> IO FileSystemTree
-initFs path' = do
+initFST :: FilePath -> IO FileSystemTree
+initFST path' = do
     isDir <- doesDirectoryExist path'
     if isDir then
         do
             children <- listDirectory path'
-            childTrees <- mapM (initFs . (path' </>)) children
+            childTrees <- mapM (initFST . (path' </>)) children
             let info = parseFile path'
             return $ Dir $ DirNode info childTrees
         else
             return $ FileNode $ parseFile path'
 
-saveFs :: FileSystemTree -> FilePath -> IO ()
-saveFs fs filePath = BL.writeFile filePath (B.encode fs)
+saveFST :: FileSystemTree -> FilePath -> IO ()
+saveFST fs filePath = BL.writeFile filePath (B.encode fs)
 
-loadFs :: FilePath -> IO FileSystemTree
-loadFs = B.decodeFile
+loadFST :: FilePath -> IO FileSystemTree
+loadFST = B.decodeFile
