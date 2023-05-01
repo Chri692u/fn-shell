@@ -13,3 +13,8 @@ A functional shell and scripting language
 1. After installing and starting cabal, the shell will start from the environment defined in ShellEnv.ini.
 2. The shell will initialize by constructing the file system and the shell environment in binary files (FST.bin & ShellEnv.bin) along with a .history file for the terminal.
 3. The shell will start with the cursor at the root, use :help for a list of commands
+
+## Todo
+1. Verify .bin files and parsing work on UNIX
+2. Better cursor representation
+3. Command parsing and exec function
