@@ -32,28 +32,20 @@ lit ::= i | b
 
 The abstract syntax for the scripting language:
 
-- Program P:
-    ```
-    P ::= {D₁, D₂, ..., Dₙ} e
-    ```
-
-- Declaration D:
-    ```
-    D ::= x = e
-    ```
-
-- Expression e:
-    ```
-    e ::= x                      (variable)
-        | e₁ e₂                  (application)
-        | λx.e                   (abstraction)
-        | let x = e₁ in e₂        (let-binding)
-        | l                      (literal)
-        | if e₁ then e₂ else e₃  (conditional expression)
-        | fix e                  (fixpoint expression)
-        | e₁ ⊙ e₂                (binary operation)
-          where ⊙ ::= + | - | * | / | ==
-    ```
+| Syntax       | Expression                                      |
+|--------------|-------------------------------------------------|
+| Program P:   | `P ::= {D₁, D₂, ..., Dₙ} e`                      |
+| Declaration D: | `D ::= x = e`                               |
+| Expression e:  |                                                 |
+|              | `e ::= x                      (variable)`        |
+|              | `    | e₁ e₂                  (application)`     |
+|              | `    | λx.e                   (abstraction)`      |
+|              | `    | let x = e₁ in e₂        (let-binding)`      |
+|              | `    | l                      (literal)`          |
+|              | `    | if e₁ then e₂ else e₃  (conditional)`       |
+|              | `    | fix e                  (fixpoint)`          |
+|              | `    | e₁ ⊙ e₂                (binary operation)`  |
+|              | `      where ⊙ ::= + | - | * | / | ==`            |
 
 
 # Current new ideas
