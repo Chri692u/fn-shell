@@ -1,9 +1,21 @@
--- The basic operators:
-let add x y = x + y --let add = \x -> \y -> x + y
-let sub x y = x - y --let sub = \x -> \y -> x - y
-let mul x y = x * y --let mul = \x -> \y -> x * y
-let div x y = x / y --let div = \x -> \y -> x / y
-let eq x y = x == y --let eq = \x -> \y -> x == y
+-- Let bindings
+let x = 0
+let b = True
+
+-- Lambda abstractions
+let f = (\x -> x + 1)
+
+-- syntactic sugar for lambda abstractions
+let f x = x + 1
+
+-- multiple arguments
+let f x y = x * y
+
+-- application
+let result = f(5)
+
+-- If then else
+let f b x1 x2 = if b then x1 else x2
 
 -- Let-rec for easy recursive definitions:
 let rec factorial n = if (n == 0) then 1 else n * (factorial (n-1))

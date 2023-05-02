@@ -23,29 +23,7 @@ The internal shell commands start with ':' and all other input will be parsed as
 
 ## The Scripting Language
 *temporary note:* This will change when the type system is added.
-
-The meta variables used for the abstract syntax:
-x   ::= identifier
-i ::= any integer constant
-b ::= true | false
-lit ::= i | b 
-
-The abstract syntax for the scripting language:
-
-| Syntax       | Expression                                      |
-|--------------|-------------------------------------------------|
-| Program P:   | `P ::= {D₁, D₂, ..., Dₙ} e`                      |
-| Declaration D: | `D ::= x = e`                               |
-| Expression e:  |                                                 |
-|              | `e ::= x                      (variable)`        |
-|              | `    | e₁ e₂                  (application)`     |
-|              | `    | λx.e                   (abstraction)`      |
-|              | `    | let x = e₁ in e₂        (let-binding)`      |
-|              | `    | l                      (literal)`          |
-|              | `    | if e₁ then e₂ else e₃  (conditional)`       |
-|              | `    | fix e                  (fixpoint)`          |
-|              | `    | e₁ ⊙ e₂                (binary operation)`  |
-|              | `      where ⊙ ::= + | - | * | / | ==`            |
+This is a simple ML-dialect with variables, lambda abstraction and application, letin bindings, fixpoint operator, binary operator. At the top level a program is defined as a list of declarations and finally an expression. For examples, look in script-examples.
 
 
 # Current new ideas
