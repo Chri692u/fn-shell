@@ -13,6 +13,7 @@ unixFullPath = do
     string "root" >> spaces >> char '=' >> spaces
     char '/'
     rel <- many1 $ letter <|> digit <|> char '/'
+    newline
     return $ "/" ++ rel
 
 winFullPath :: Parser FilePath
