@@ -68,9 +68,9 @@ data TypeError = UnificationFail Type Type
                | UnboundVariable String
 
 instance Show TypeError where
-    show (UnificationFail t1 t2) = "Failed to unify type (" ++ show t1 ++ ") with type (" ++ show t2 ++ ")."
-    show (InfiniteType tvar t) = "Type variable (" ++ show tvar ++ ") is already bound to (" ++ show t ++ ")."
-    show (UnboundVariable name) = "Attempted to lookup type variable that is unbound: " ++ name ++ ")."
+    show (UnificationFail t1 t2) = "Script typing error: Failed to unify type (" ++ show t1 ++ ") with type (" ++ show t2 ++ ")."
+    show (InfiniteType tvar t) = "Script typing error: Type variable (" ++ show tvar ++ ") is already bound to (" ++ show t ++ ")."
+    show (UnboundVariable name) = "Script typing error: Attempted to lookup type variable that is unbound: " ++ name ++ ")."
 
 -- Initial unique type variables
 initUnique :: Unique
