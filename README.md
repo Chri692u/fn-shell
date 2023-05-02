@@ -25,10 +25,10 @@ The internal shell commands start with ':' and all other input will be parsed as
 *temporary note:* This will change when the type system is added.
 
 The meta variables used for the abstract syntax:
--x   ::= identifier
--i   ::= any integer constant
--b   ::= true | false
--lit ::= i | b 
+x   ::= identifier
+i ::= any integer constant
+b ::= true | false
+lit ::= i | b 
 
 The abstract syntax for the scripting language:
 
@@ -44,16 +44,17 @@ The abstract syntax for the scripting language:
 
 - Expression e:
     ```
-    e -::= x                   (variable)
-        -| e₁ e₂               (application)
-        -| λx.e                (abstraction)
-        -| let x = e₁ in e₂     (let-binding)
-        -| l                   (literal)
-        -| if e₁ then e₂ else e₃ (conditional expression)
-        -| fix e               (fixpoint expression)
-        -| e₁ ⊙ e₂             (binary operation)
+    e ::= x                      (variable)
+        | e₁ e₂                  (application)
+        | λx.e                   (abstraction)
+        | let x = e₁ in e₂        (let-binding)
+        | l                      (literal)
+        | if e₁ then e₂ else e₃  (conditional expression)
+        | fix e                  (fixpoint expression)
+        | e₁ ⊙ e₂                (binary operation)
+          where ⊙ ::= + | - | * | / | ==
     ```
-    where `⊙ ::= + | - | * | / | ==`
+
 
 # Current new ideas
 1. Better cursor representation
