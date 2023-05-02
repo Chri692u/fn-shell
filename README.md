@@ -15,12 +15,40 @@ A functional shell and scripting language built from first principles.
 3. The shell will start with the cursor at the root, use :help for a list of commands
 
 ## The Shell
-This will be here when I can be bothered
+The Shell reads a root directory from a root path, this needs to be a "full" path starting from C:/(Or something other than C) on windows and / on UNIX. Then it creates a tree representation of the underlying file system (an FST), which can be manipulated using the scripting language.
+
+The shell manages a cursor which is a representation of the current working directory. You can change the cursor with cd .. and cd *existing dir visible from cursor*. 
+
+The internal shell commands start with ':' and all other input will be parsed as the scripting language (*note:* the scripting language is only a parser for the moment).
 
 ## The Scripting Language
-read above 
+*temporary note:* This will change when the type system is added.
 
-# Todo
-1. Verify .bin files and parsing work on UNIX
-2. Better cursor representation
-3. Command parsing and exec function
+The meta variables used for the abstract syntax:
+x   ::= identifier
+i ::= any integer constant
+b ::= true | false
+lit ::= i | b 
+
+The abstract syntax for the scripting language:
+Program P:
+    P ::= {D₁, D₂, ..., Dₙ} e
+
+Declaration D:
+    D ::= x = e
+
+Expression e:
+    e ::= x (variable)
+    | e₁ e₂ (application)
+    | λx.e (abstraction)
+    | let x = e₁ in e₂ (let-binding)
+    | l (literal)
+    | if e₁ then e₂ else e₃ (conditional expression)
+    | fix e (fixpoint expression)
+    | e₁ ⊙ e₂ (binary operation)
+        where ⊙ ::= + | - | * | / | ==
+
+# Current new ideas
+1. Better cursor representation
+2. Type system for the language
+3. Constructs to manipulate the FST
