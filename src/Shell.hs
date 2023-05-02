@@ -1,5 +1,3 @@
-{-# OPTIONS_GHC -Wno-incomplete-patterns #-}
-
 module Shell(shell) where
 
 import Data.List (isPrefixOf)
@@ -11,8 +9,10 @@ import System.FilePath
 import FileSystem
 import ShellCommands
 import ShellTypes
+import ScriptInfer
 import ShellUtility
 import qualified Data.Text.Lazy as L
+import qualified Data.Map as M
 
 -- Initialize FST
 initState :: ShellEnv -> IO IState
@@ -23,14 +23,14 @@ initState env = do
     if exist then do
         fs <- loadFST (shellDir </> tree)
         cursor <- initCursor fs
-        return $ IState fs cursor
+        return $ IState fs cursor emptyTyenv
     else do
         putStrLn "Could not find FST in cache."
         putStrLn $ "Loading new FST at " ++ shellDir </> tree
         fs <- initFST $ root env
         cursor <- initCursor fs
         saveFST fs (shellDir </> tree)
-        return $ IState fs cursor
+        return $ IState fs cursor emptyTyenv
 
 -- Initialize cursor
 initCursor :: FileSystemTree -> IO [Directory]
@@ -47,7 +47,7 @@ end = liftIO (putStrLn "Leaving (fn shell).") >> return Exit
 
 -- Handle input --
 cmd :: String -> Shell ()
-cmd arg = exec (L.pack arg)
+cmd arg = exec True (L.pack arg)
 
 -- Tab completion --
 complete :: Monad m => WordCompleter m

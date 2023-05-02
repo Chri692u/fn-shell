@@ -6,6 +6,7 @@ import Control.Monad.State
 import System.FilePath
 import qualified Data.Binary as B
 import qualified Data.ByteString.Lazy as BL
+import ScriptInfer (TypeEnv)
 
 -- Types for the file system
 
@@ -66,7 +67,8 @@ instance B.Binary FileSystemTree where
 -- Shell state
 data IState = IState {
       fs :: FileSystemTree ,
-      cursor :: [Directory]
+      cursor :: [Directory],
+      tyctx :: TypeEnv
     }
 
 -- Shell Type

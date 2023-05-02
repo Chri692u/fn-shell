@@ -17,6 +17,7 @@ import System.Directory (getCurrentDirectory)
 import Data.Foldable (find)
 import Data.Maybe
 import ScriptParser
+import ScriptInfer
 
 -- Options --
 settings :: [(String, String -> Shell ())]
@@ -86,21 +87,44 @@ ls path = do
 cd :: String -> Shell ()
 cd path = do
     st <- get
+    let tenv = tyctx st
     let c = head $ cursor st
     let found = find (\t -> fsName t == path) (dirTree c)
     when (isJust found) $ do
         let c' = fsDir $ fromJust found
-        put (IState (fs st) (c':cursor st))
+        put $ IState (fs st) (c':cursor st) tenv
     when (path == "..") $
         if null (tail $ cursor st) then topOfFs
-        else void $ put (IState (fs st) (tail $ cursor st))
+        else void $ put $ IState (fs st) (tail $ cursor st) tenv
     unless (isJust found || path == "..") notFound
         where notFound = liftIO $ putStrLn "Error: Directory does not exist"
               topOfFs  = liftIO $ putStrLn "Error: Top of filestructure already"
 
--- mock execute function
-exec :: L.Text -> Shell ()
-exec input = do
+-- Show output from shell
+showOutput :: String -> IState -> Shell ()
+showOutput arg st = do
+  case judgement (tyctx st) "SHELL" of
+    Just val -> liftIO $ print val
+    Nothing -> return ()
+
+-- Execute script function
+exec :: Bool -> L.Text -> Shell ()
+exec update input = do
     st <- get
-    ast <- hoistErr $ parseModule "Error parsing script: " input 
+    let fst = fs st
+        c = cursor st
+    ast <- hoistErr $ parseModule "Error parsing script: " input
     liftIO $ print ast
+    tyctx' <- hoistErr $ inferTop (tyctx st) ast
+    let st' = st 
+            { fs = fst
+            , cursor = c
+            , tyctx = tyctx' <> tyctx st
+            }
+            
+    when update (put st')
+    
+    
+    scheme <- hoistErr $ inferExpr (tyctx st') (snd $ head ast)
+    liftIO $ print scheme
+            
