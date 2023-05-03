@@ -27,7 +27,9 @@ This is a simple ML-dialect with variables, lambda abstraction and application, 
 
 
 # Current new ideas
-1. Big refactor please
-2. Better cursor representation
-3. File system command parsing
-4. Constructs to manipulate the FST
+
+# todo
+1. redesign cursor
+2. command parsing
+3. more operators (not, and, or)
+4. Evaluation of language
