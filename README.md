@@ -22,8 +22,7 @@ The shell manages a cursor which is a representation of the current working dire
 The internal shell commands start with ':' and all other input will be parsed as the scripting language (*note:* the scripting language is only a parser for the moment).
 
 ## The Scripting Language
-*temporary note:* This will change when the type system is added.
-This is a simple ML-dialect with variables, lambda abstraction and application, letin bindings, fixpoint operator, binary operator. At the top level a program is defined as a list of declarations and finally an expression. For examples, look in script-examples.
+This is a simple ML-dialect with variables, lambda abstraction and application, letin bindings, fixpoint operator, binary operator. At the top level a program is defined as a list of declarations and finally an expression. For examples, look in script-examples. Right now it is only a parser and type system (syntax directed HM inference).
 
 
 # Current new ideas
