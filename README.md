@@ -24,11 +24,9 @@ The internal shell commands start with ':' and all other input will be parsed as
 ## The Scripting Language
 This is a simple ML-dialect with variables, lambda abstraction and application, letin bindings, fixpoint operator, binary operator. At the top level a program is defined as a list of declarations and finally an expression. For examples, look in script-examples. Right now it is only a parser and type system (syntax directed HM inference).
 
-
-# Current new ideas
-
-# todo
-1. redesign cursor
-2. command parsing
-3. more operators (not, and, or)
-4. Evaluation of language
+# possible todo
+1. Redesign language and cursor?
+2. Command parsing (cd, ls, mkdir, touch, cat)
+3. Big structure refactor (move code sections where they fit better)
+3. More operators (not, and, or)
+4. Evaluation
