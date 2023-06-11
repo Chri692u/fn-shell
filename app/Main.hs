@@ -5,9 +5,9 @@ import System.Environment
 import System.FilePath
 import System.Directory
 
-import Shell
-import ShellTypes
-import ShellParsers
+import Terminal.Shell
+import Terminal.ShellTypes
+import Terminal.ConfigParser
 
 -- Check if ShellEnv.ini was changed
 isUnchanged :: ShellEnv -> FilePath -> IO Bool

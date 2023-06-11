@@ -1,5 +1,5 @@
 {-# LANGUAGE LambdaCase #-}
-module ShellCommands(settings, exec) where
+module Terminal.Commands(settings, exec) where
 
 import Control.Monad.Trans
 import Control.Monad.State hiding (when, unless)
@@ -7,15 +7,15 @@ import Control.Conditional
 import System.Process (callCommand)
 import System.Exit (exitSuccess)
 import System.Console.Repline
-import qualified Data.Text.Lazy as L
-import qualified Data.Text.Lazy.IO as L
-
-import ShellTypes
-import FileSystem
-import ShellUtility
 import System.Directory (getCurrentDirectory)
 import Data.Foldable (find)
 import Data.Maybe
+import qualified Data.Text.Lazy as L
+import qualified Data.Text.Lazy.IO as L
+
+import Terminal.ShellTypes
+import Terminal.Utility
+import FileSystem
 import ScriptParser
 import ScriptInfer
 

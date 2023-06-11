@@ -1,10 +1,10 @@
-module ShellParsers(parseFile, parseEnv) where
+module Terminal.ConfigParser(parseFile, parseEnv) where
 
-import Text.ParserCombinators.Parsec
-
-import System.FilePath
-import ShellTypes
 import Control.Conditional (when)
+import Text.ParserCombinators.Parsec
+import System.FilePath
+
+import Terminal.ShellTypes
 
 
 -- File path parsing

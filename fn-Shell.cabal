@@ -8,10 +8,10 @@ extra-source-files:  CHANGELOG.md, README.md
 
 library
   hs-source-dirs:      src
-  exposed-modules:     Shell, ShellTypes, ShellCommands, ShellParsers, ShellUtility,
+  exposed-modules:     Terminal.Shell, Terminal.ShellTypes, Terminal.Commands, Terminal.ConfigParser, Terminal.Utility,
                        FileSystem,
                        ScriptSyntax, ScriptLexer, ScriptParser, ScriptTypes, ScriptInfer
-                       --
+                       
   build-depends:       base,
                        text,
                        bytestring,

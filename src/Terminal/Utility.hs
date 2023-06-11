@@ -1,7 +1,8 @@
-module ShellUtility where
+module Terminal.Utility where
 
 import System.Directory
-import ShellTypes (IState)
+
+import Terminal.ShellTypes (IState)
 
 initMsg :: IO ()
 initMsg = do 

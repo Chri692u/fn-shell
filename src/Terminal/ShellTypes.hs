@@ -1,11 +1,12 @@
 {-# OPTIONS_GHC -Wno-incomplete-patterns #-}
-module ShellTypes where
+module Terminal.ShellTypes where
 
-import System.Console.Repline
-import Control.Monad.State
-import System.FilePath
+import Control.Monad.State ( StateT, MonadIO(liftIO) )
+import System.Console.Repline ( HaskelineT, abort )
+import System.FilePath (takeFileName)
 import qualified Data.Binary as B
 import qualified Data.ByteString.Lazy as BL
+
 import ScriptInfer (TypeEnv)
 
 -- Types for the file system

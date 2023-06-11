@@ -1,18 +1,20 @@
-module Shell(shell) where
+module Terminal.Shell(shell) where
 
-import Data.List (isPrefixOf)
 import Control.Monad.Trans
 import Control.Monad.State
 import System.Console.Repline
 import System.Directory
 import System.FilePath
-import FileSystem
-import ShellCommands
-import ShellTypes
-import ScriptInfer
-import ShellUtility
+import Data.List (isPrefixOf)
 import qualified Data.Text.Lazy as L
 import qualified Data.Map as M
+
+import FileSystem
+import Terminal.Commands
+import Terminal.ShellTypes
+import ScriptInfer
+import Terminal.Utility
+
 
 -- Initialize FST
 initState :: ShellEnv -> IO IState
