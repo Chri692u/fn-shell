@@ -16,8 +16,8 @@ import qualified Data.Text.Lazy.IO as L
 import Terminal.ShellTypes
 import Terminal.Utility
 import FileSystem.FST
-import ScriptParser
-import ScriptInfer
+import Language.Parser
+import Language.Infer
 
 -- Options --
 settings :: [(String, String -> Shell ())]

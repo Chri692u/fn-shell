@@ -1,4 +1,4 @@
-module ScriptTypes where
+module Language.Types where
 
 newtype TVar = TV String
   deriving (Show, Eq, Ord)

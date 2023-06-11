@@ -7,7 +7,7 @@ import System.FilePath (takeFileName)
 import qualified Data.Binary as B
 import qualified Data.ByteString.Lazy as BL
 
-import ScriptInfer (TypeEnv)
+import Language.Infer (TypeEnv)
 
 -- Types for the file system
 

@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module ScriptParser (parseModule) where
+module Language.Parser (parseModule) where
 
 import Text.Parsec
 import Text.Parsec.Text.Lazy (Parser)
@@ -8,8 +8,8 @@ import qualified Text.Parsec.Expr as X
 import qualified Text.Parsec.Token as T
 import qualified Data.Text.Lazy as L
 
-import ScriptSyntax
-import ScriptLexer
+import Language.Syntax
+import Language.Lexer
 
 
 integer :: Parser Integer

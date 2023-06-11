@@ -12,7 +12,7 @@ import qualified Data.Map as M
 import FileSystem.FST
 import Terminal.Commands
 import Terminal.ShellTypes
-import ScriptInfer
+import Language.Infer
 import Terminal.Utility
 
 

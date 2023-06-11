@@ -1,4 +1,4 @@
-module ScriptSyntax where
+module Language.Syntax where
 
 type Id = String
 

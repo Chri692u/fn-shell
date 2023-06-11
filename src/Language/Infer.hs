@@ -2,7 +2,7 @@
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE TypeSynonymInstances #-}
 
-module ScriptInfer where
+module Language.Infer where
 
 import Prelude hiding (foldr)
 import Data.Monoid
@@ -13,8 +13,8 @@ import qualified Data.Set as S
 import Control.Monad.State
 import Control.Monad.Except
 
-import ScriptSyntax
-import ScriptTypes
+import Language.Syntax
+import Language.Types
 
 -- Type variable environment
 newtype TypeEnv = TypeEnv (M.Map Id Scheme) deriving (Monoid, Semigroup)

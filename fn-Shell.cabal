@@ -10,7 +10,7 @@ library
   hs-source-dirs:      src
   exposed-modules:     Terminal.Shell, Terminal.ShellTypes, Terminal.Commands, Terminal.ConfigParser, Terminal.Utility,
                        FileSystem.FST,
-                       ScriptSyntax, ScriptLexer, ScriptParser, ScriptTypes, ScriptInfer
+                       Language.Syntax, Language.Lexer, Language.Parser, Language.Types, Language.Infer
                        
   build-depends:       base,
                        text,

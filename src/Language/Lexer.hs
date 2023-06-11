@@ -1,4 +1,4 @@
-module ScriptLexer where
+module Language.Lexer where
 
 import Text.Parsec
 import Text.Parsec.Text.Lazy
