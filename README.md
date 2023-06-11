@@ -10,7 +10,7 @@ A functional shell and scripting language built from first principles.
 2. The Haskell Cabal (cabal)
 
 ### Starting the shell
-1. After installing and starting cabal, the shell will start from the environment defined in ShellEnv.ini.
+1. After installing and starting cabal, the shell will start from the environment defined in ShellEnv.ini (refer to the one in the repo)
 2. The shell will initialize by constructing the file system and the shell environment in binary files (FST.bin & ShellEnv.bin) along with a .history file for the terminal.
 3. The shell will start with the cursor at the root, use :help for a list of commands
 
@@ -19,14 +19,24 @@ The Shell reads a root directory from a root path, this needs to be a "full" pat
 
 The shell manages a cursor which is a representation of the current working directory. You can change the cursor with cd .. and cd *existing dir visible from cursor*. 
 
-The internal shell commands start with ':' and all other input will be parsed as the scripting language (*note:* the scripting language is only a parser for the moment).
+The internal shell commands start with ':' and all other input will be parsed as the scripting language.
 
 ## The Scripting Language
 This is a simple ML-dialect with variables, lambda abstraction and application, letin bindings, fixpoint operator, binary operator. At the top level a program is defined as a list of declarations and finally an expression. For examples, look in script-examples. Right now it is only a parser and type system (syntax directed HM inference).
 
 # possible todo
-1. Redesign language and cursor?
-2. Command parsing (cd, ls, mkdir, touch, cat)
-3. Big structure refactor (move code sections where they fit better)
-3. More operators (not, and, or)
-4. Evaluation
+## Shell
+1. Redesign shell environment and cursor
+2. Parsing on commands
+3. Refactor
+
+## Language
+1. Megaparsec for better errors
+2. Evaluation (Runtime system?)
+3. Extend typesystem with files, paths and more? (maybe kinds, contrains over type variables and so on)
+4. More operators
+5. Modules and builtin functions
+
+## Filesystem
+1. Design interaction with filesystem (monads/runtime system)
+2. Refactor
