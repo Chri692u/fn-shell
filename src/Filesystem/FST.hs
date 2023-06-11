@@ -1,10 +1,11 @@
-module FileSystem(initFST, saveFST, loadFST, exists) where
+module FileSystem.FST(initFST, saveFST, loadFST, exists) where
 
 import qualified Data.ByteString.Lazy as BL
 import qualified Data.Binary as B
 
 import System.Directory ( doesDirectoryExist, listDirectory )
 import System.FilePath
+
 import Terminal.ShellTypes
 import Terminal.ConfigParser
 

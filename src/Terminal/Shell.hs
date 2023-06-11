@@ -9,7 +9,7 @@ import Data.List (isPrefixOf)
 import qualified Data.Text.Lazy as L
 import qualified Data.Map as M
 
-import FileSystem
+import FileSystem.FST
 import Terminal.Commands
 import Terminal.ShellTypes
 import ScriptInfer
