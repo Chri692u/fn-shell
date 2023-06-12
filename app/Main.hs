@@ -1,13 +1,12 @@
 module Main where
 
-import Control.Conditional
-import System.Environment
-import System.FilePath
+import Control.Conditional (unless, when)
+import System.FilePath ((</>))
 import System.Directory
 
-import Terminal.Shell
-import Terminal.ShellTypes
-import Terminal.ConfigParser
+import Terminal.Shell ( shell )
+import Terminal.ShellTypes (ShellEnv(root), loadSE, saveSE)
+import Terminal.ConfigParser (parseEnv)
 
 -- Check if ShellEnv.ini was changed
 isUnchanged :: ShellEnv -> FilePath -> IO Bool

@@ -17,7 +17,7 @@ import Language.Syntax
 import Language.Types
 
 -- Type variable environment
-newtype TypeEnv = TypeEnv (M.Map Id Scheme) deriving (Monoid, Semigroup)
+newtype TypeEnv = TypeEnv (M.Map Id Scheme) deriving (Show, Monoid, Semigroup)
 
 -- Unique type variables
 newtype Unique = Unique { count :: Int }

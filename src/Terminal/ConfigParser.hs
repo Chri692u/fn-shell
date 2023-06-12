@@ -1,4 +1,4 @@
-module Terminal.ConfigParser(parseFile, parseEnv) where
+module Terminal.ConfigParser(parseEnv) where
 
 import Control.Conditional (when)
 import Text.ParserCombinators.Parsec
@@ -55,11 +55,5 @@ envParser = do
         return $ ShellEnv os path vars
 
 -- Top level
-parseFile :: FilePath -> FileInfo
-parseFile path = FileInfo path ext hidden
-    where
-        ext = takeExtension path
-        hidden = '.' == head (takeFileName path)
-
 parseEnv :: String -> Either ParseError ShellEnv
 parseEnv = parse envParser "ENV PARSE ERROR: "

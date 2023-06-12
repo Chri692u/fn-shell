@@ -127,4 +127,5 @@ exec update input = do
     
     scheme <- hoistErr $ inferExpr (tyctx st') (snd $ head ast)
     liftIO $ print scheme
+    liftIO $ print $ tyctx st'
             
