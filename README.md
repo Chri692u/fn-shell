@@ -24,19 +24,9 @@ The internal shell commands start with ':' and all other input will be parsed as
 ## The Scripting Language
 This is a simple ML-dialect with variables, lambda abstraction and application, letin bindings, fixpoint operator, binary operator. At the top level a program is defined as a list of declarations and finally an expression. For examples, look in script-examples. Right now it is only a parser and type system (syntax directed HM inference).
 
-# possible todo
-## Shell
-1. Redesign shell environment and cursor
-2. Parsing on commands
-3. Refactor
-
-## Language
-1. Megaparsec for better errors
-2. Evaluation (Runtime system?)
-3. Extend typesystem with files, paths and more? (maybe kinds, contrains over type variables and so on)
-4. More operators
-5. Modules and builtin functions
-
-## Filesystem
-1. Design interaction with filesystem (monads/runtime system)
-2. Refactor
+# todo
+1. Del FST op i 2 filer, 1 til FST og 1 til funktioner
+2. lav "Typesystem" i Language og del op i TypeEnv, Constrains og Infer
+3. lav constrain solver
+4. minimal evaluering
+5. rename og flyt det sidste kode
