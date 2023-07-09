@@ -29,4 +29,4 @@ This is a simple ML-dialect with variables, lambda abstraction and application, 
 2. lav "Typesystem" i Language og del op i TypeEnv, Constrains og Infer
 3. lav constrain solver
 4. minimal evaluering
-5. rename og flyt det sidste kode
+5. rename, flyt det sidste kode og fix imports
