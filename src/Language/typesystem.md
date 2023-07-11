@@ -4,7 +4,7 @@
 
 The Hindley-Milner type system is a type inference algorithm that combines parametric polymorphism (also known as generics) and Hindley-Milner type inference to statically type-check programs. It uses the following type system:
 
-1. **Basic Types**: The type system includes basic types such as `Int`, `Bool`, `String`, etc.
+1. **Basic Types**: The type system includes basic types such as `Int`, `Bool`, etc.
 
 2. **Type Variables**: Type variables represent unknown types and are denoted by lowercase letters (e.g., `'a`, `'b`, `'c`, etc.).
 
