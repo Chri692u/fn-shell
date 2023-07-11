@@ -1,4 +1,4 @@
-{-# OPTIONS_GHC -Wno-incomplete-patterns #-}
+{-# LANGUAGE InstanceSigs #-}
 module Terminal.ShellTypes where
 
 import Control.Monad.State ( StateT, MonadIO(liftIO) )
@@ -31,15 +31,19 @@ data ShellVar = Extern String FilePath
 
 -- Equality Instance
 instance Eq ShellVar where
+    (==) :: ShellVar -> ShellVar -> Bool
     (Extern name1 path1) == (Extern name2 path2) = nameOk && pathOk
       where pathOk = path1 == path2
             nameOk = name1 == name2
 
 -- Binary Instance
 instance B.Binary ShellVar where
+  put :: ShellVar -> B.Put
   put (Extern n p) = do
     B.put n
     B.put p
+    
+  get :: B.Get ShellVar
   get = Extern <$> B.get <*> B.get
 
 -- Shell Env
@@ -51,6 +55,7 @@ data ShellEnv = ShellEnv {
 
 -- Equality Instance
 instance Eq ShellEnv where
+    (==) :: ShellEnv -> ShellEnv -> Bool
     (ShellEnv os1 root1 vars1) == (ShellEnv os2 root2 vars2) = osOk && rootOk && varsOk
       where osOk   = os1 == os2
             rootOk = root1 == root2
@@ -58,15 +63,19 @@ instance Eq ShellEnv where
 
 -- Show Instance
 instance Show ShellEnv where
+  show :: ShellEnv -> String
   show (ShellEnv os r vs) = os ++ ": " ++ r ++ "\nwith vars: " ++ concatMap show' vs ++ "\n"
     where show' (Extern name _) = " " ++ name
 
 -- Binary Instance
 instance B.Binary ShellEnv where
+  put :: ShellEnv -> B.Put
   put (ShellEnv os r vs) = do
     B.put os
     B.put r
     B.put vs
+
+  get :: B.Get ShellEnv
   get = ShellEnv <$> B.get <*> B.get <*> B.get
 
 -- Save shell environment
