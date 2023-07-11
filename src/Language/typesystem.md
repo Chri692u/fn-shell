@@ -36,6 +36,18 @@ The algorithm works as follows:
 
 8. **Output**: The algorithm returns the most general type of the expression `E` based on the given type environment `Γ`.
 
+## Substitution Rules
+
+During the constraint solving phase, the algorithm applies the following substitution rules to propagate type variable substitutions:
+
+1. **Identity Rule**: `α := α`, where `α` is a type variable.
+
+2. **Capture-Avoiding Substitution**: If `α` is a type variable and `β` is another type variable, the substitution `α := β` is applied only if `α` does not occur in the type `β`.
+
+3. **Composition Rule**: If `θ` and `ψ` are two substitutions, the composition `θ ∘ ψ` is defined as applying `θ` followed by `ψ`.
+
+4. **Substitution Rule**: If `α` is a type variable and `T` is a type, the substitution `α := T` is applied to all occurrences of `α` in the constraints and the type `T` is substituted.
+
 ---
 
-This markdown provides an overview of the semantics of HM-Inference, specifically the type system and Algorithm W. It outlines the key components and steps involved in inferring types for expressions. Further details and code examples can be found in academic papers and programming language textbooks related to the Hindley-Milner type system.
+This markdown provides an overview of the semantics of HM-Inference, including the type system, Algorithm W, and the substitution rules used during constraint solving. It outlines the key components and steps involved in inferring types for expressions. Further details and code examples can be found in academic papers and programming language textbooks related to the Hindley-Milner type system.
